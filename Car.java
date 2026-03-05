@@ -7,7 +7,6 @@
 
 public class Car {
 
-    // Fields from CSV file
     private String carID;
     private String brand;
     private String model;
@@ -16,9 +15,9 @@ public class Car {
     private String color;
     private double mileageKmpl;
 
-    // Constructor
     public Car(String carID, String brand, String model, int year,
                String fuelType, String color, double mileageKmpl) {
+
         this.carID = carID;
         this.brand = brand;
         this.model = model;
@@ -28,7 +27,6 @@ public class Car {
         this.mileageKmpl = mileageKmpl;
     }
 
-    // Getters
     public String getCarID() { return carID; }
     public String getBrand() { return brand; }
     public String getModel() { return model; }

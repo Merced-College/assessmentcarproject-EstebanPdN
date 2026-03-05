@@ -22,11 +22,10 @@ public class CarDataLoader {
 
                 String[] parts = line.split(",");
 
-                if (parts.length < 7) {
-                    continue;
-                }
+                if (parts.length < 7) continue;
 
                 try {
+
                     String carID = parts[0].trim();
                     String brand = parts[1].trim();
                     String model = parts[2].trim();
@@ -41,7 +40,7 @@ public class CarDataLoader {
                     cars.add(car);
 
                 } catch (Exception e) {
-                    // skip bad rows
+                    // skip malformed rows
                 }
             }
 

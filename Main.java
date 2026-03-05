@@ -2,7 +2,7 @@
  * Name: Esteban Pereira das Neves
  * Date: 03/03/2026
  * Project: Car Data Analyzer
- * Description: Main class - handles sorting, searching, stats and menu
+ * Description: Main program with menu, sorting, searching and statistics
  */
 
 import java.util.*;
@@ -11,71 +11,81 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
-
         ArrayList<Car> cars = CarDataLoader.loadCars("Car_Data.csv");
 
         ArrayList<Car> working =
                 new ArrayList<>(cars.subList(0, 2000));
 
-        boolean running = true;
+        Scanner scanner = new Scanner(System.in);
+        int choice = 0;
 
-        while (running) {
+        while (choice != 5) {
 
             System.out.println("\n===== CAR DATA ANALYZER =====");
-            System.out.println("1. Search by Year");
-            System.out.println("2. Sort by Year (ascending)");
-            System.out.println("3. Show Statistics");
-            System.out.println("4. Exit");
-            System.out.print("Choose option: ");
+            System.out.println("1. Sort by Year");
+            System.out.println("2. Search by Year Range");
+            System.out.println("3. Search by Color");
+            System.out.println("4. Show Statistics");
+            System.out.println("5. Exit");
 
-            int choice = scanner.nextInt();
+            System.out.print("Choose option: ");
+            choice = scanner.nextInt();
 
             switch (choice) {
 
                 case 1:
-                    // Must sort first before binary search
+
                     sortByYearAscending(working);
 
-                    System.out.print("Enter year to search: ");
-                    int year = scanner.nextInt();
-
-                    Car found = binarySearchByYear(working, year);
-
-                    if (found != null) {
-                        System.out.println("Found: " + found);
-                    } else {
-                        System.out.println("Year not found.");
-                    }
-                    break;
-
-                case 2:
-                    sortByYearAscending(working);
-                    System.out.println("Sorted by year ascending.");
                     for (int i = 0; i < 10; i++) {
                         System.out.println(working.get(i));
                     }
+
+                    break;
+
+                case 2:
+
+                    System.out.print("Enter start year: ");
+                    int startYear = scanner.nextInt();
+
+                    System.out.print("Enter end year: ");
+                    int endYear = scanner.nextInt();
+
+                    searchByYearRange(working, startYear, endYear);
+
                     break;
 
                 case 3:
-                    printAverageMileage(working);
-                    printCountsByFuel(working);
+
+                    System.out.print("Enter color: ");
+                    scanner.nextLine();
+                    String color = scanner.nextLine();
+
+                    searchByColor(working, color);
+
                     break;
 
                 case 4:
-                    running = false;
+
+                    printAverageMileage(working);
+                    printCountsByFuel(working);
+
+                    break;
+
+                case 5:
+
                     System.out.println("Exiting program.");
+
                     break;
 
                 default:
+
                     System.out.println("Invalid option.");
             }
         }
-
-        scanner.close();
     }
 
-    // Selection Sort by Year (ascending)
+    // Selection Sort by Year
     public static void sortByYearAscending(ArrayList<Car> list) {
 
         for (int i = 0; i < list.size() - 1; i++) {
@@ -89,7 +99,6 @@ public class Main {
                 }
             }
 
-            // Swap
             Car temp = list.get(i);
             list.set(i, list.get(minIndex));
             list.set(minIndex, temp);
@@ -118,37 +127,76 @@ public class Main {
             }
         }
 
-        return null; // not found
+        return null;
     }
 
-    // Average mileage (Step 5 requirement)
-    private static void printAverageMileage(ArrayList<Car> list) {
+    // Search by Year Range
+    public static void searchByYearRange(ArrayList<Car> list, int startYear, int endYear) {
+
+        boolean found = false;
+
+        for (Car car : list) {
+
+            if (car.getYear() >= startYear && car.getYear() <= endYear) {
+                System.out.println(car);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No cars found in that range.");
+        }
+    }
+
+    // Search by Color
+    public static void searchByColor(ArrayList<Car> list, String color) {
+
+        boolean found = false;
+
+        for (Car car : list) {
+
+            if (car.getColor().equalsIgnoreCase(color)) {
+                System.out.println(car);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Color not found.");
+        }
+    }
+
+    // Average mileage
+    public static void printAverageMileage(ArrayList<Car> list) {
 
         double sum = 0;
 
-        for (Car c : list) {
-            sum += c.getMileageKmpl();
+        for (Car car : list) {
+            sum += car.getMileageKmpl();
         }
 
-        double avg = list.isEmpty() ? 0 : sum / list.size();
+        double avg = sum / list.size();
 
         System.out.printf("Average mileage: %.2f kmpl\n", avg);
     }
 
-    // Count by fuel type (Step 5 requirement)
-    private static void printCountsByFuel(ArrayList<Car> list) {
+    // Count by fuel type
+    public static void printCountsByFuel(ArrayList<Car> list) {
 
-        Map<String, Integer> counts = new HashMap<>();
+        HashMap<String, Integer> counts = new HashMap<>();
 
-        for (Car c : list) {
-            counts.put(c.getFuelType(),
-                    counts.getOrDefault(c.getFuelType(), 0) + 1);
+        for (Car car : list) {
+
+            String fuel = car.getFuelType();
+
+            counts.put(fuel, counts.getOrDefault(fuel, 0) + 1);
         }
 
         System.out.println("Counts by fuel type:");
 
-        for (Map.Entry<String, Integer> entry : counts.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+        for (String fuel : counts.keySet()) {
+
+            System.out.println(fuel + ": " + counts.get(fuel));
         }
     }
 }
