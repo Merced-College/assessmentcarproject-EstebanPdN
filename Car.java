@@ -6,7 +6,8 @@
  */
 
 public class Car {
-
+    
+    // Fields that match the columns in the CSV dataset
     private String carID;
     private String brand;
     private String model;
@@ -15,6 +16,7 @@ public class Car {
     private String color;
     private double mileageKmpl;
 
+    // Constructor for Car object
     public Car(String carID, String brand, String model, int year,
                String fuelType, String color, double mileageKmpl) {
 
@@ -26,7 +28,7 @@ public class Car {
         this.color = color;
         this.mileageKmpl = mileageKmpl;
     }
-
+    // Getters
     public String getCarID() { return carID; }
     public String getBrand() { return brand; }
     public String getModel() { return model; }

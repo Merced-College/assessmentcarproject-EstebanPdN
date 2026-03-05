@@ -10,13 +10,15 @@ import java.util.*;
 
 public class CarDataLoader {
 
+    //load all cars into an ArrayList
     public static ArrayList<Car> loadCars(String filename) {
 
         ArrayList<Car> cars = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-
-            String line = br.readLine(); // skip header
+            
+            // skip header
+            String line = br.readLine(); 
 
             while ((line = br.readLine()) != null) {
 
@@ -25,7 +27,8 @@ public class CarDataLoader {
                 if (parts.length < 7) continue;
 
                 try {
-
+                    
+                    //convert values and create Car object
                     String carID = parts[0].trim();
                     String brand = parts[1].trim();
                     String model = parts[2].trim();
